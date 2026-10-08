@@ -1,0 +1,696 @@
+/* =====================================================
+   바이브 카페 주문서 스타일시트
+   파일: style.css
+   설명: 카페 느낌의 따뜻한 색상 테마, 반응형 디자인
+   ===================================================== */
+
+/* ----- 색상 변수 정의 ----- */
+:root {
+  --color-bg:         #faf6f0;   /* 전체 배경 - 따뜻한 베이지 */
+  --color-card:       #ffffff;   /* 주문서 카드 배경 */
+  --color-brown:      #6b4226;   /* 메인 브라운 */
+  --color-brown-light:#8b5e3c;   /* hover 시 약간 밝은 브라운 */
+  --color-brown-pale: #f0e6da;   /* 포커스 그림자 · 구분선 */
+  --color-text:       #3a2510;   /* 기본 텍스트 - 진한 갈색 */
+  --color-text-muted: #9a7c65;   /* 보조 텍스트 - 연한 갈색 */
+  --color-border:     #d9c4ae;   /* 입력칸 기본 테두리 */
+  --color-required:   #c0392b;   /* 필수 표시 * 빨간색 */
+  --color-success-bg: #eafaf1;   /* 주문 확인 메시지 배경 - 연두 */
+  --color-success-fg: #1e8449;   /* 주문 확인 메시지 글씨 - 초록 */
+  --color-success-bd: #a9dfbf;   /* 주문 확인 메시지 테두리 */
+  --color-error:      #c0392b;   /* 유효성 오류 메시지 빨간색 */
+  --radius-sm:        6px;
+  --radius-md:        8px;
+  --radius-lg:        14px;
+  --shadow-card:      0 4px 20px rgba(107, 66, 38, 0.10);
+  --shadow-focus:     0 0 0 3px rgba(107, 66, 38, 0.18);
+  --transition:       0.2s ease;
+}
+
+/* =====================================================
+   리셋 & 기본 설정
+   ===================================================== */
+
+/* 박스 모델 통일 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 전체 배경 및 폰트 */
+body {
+  background-color: var(--color-bg);
+  font-family: '맑은 고딕', 'Malgun Gothic', '나눔고딕', sans-serif;
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 24px 16px 48px;  /* 상하 여백 - 모바일에서도 숨막히지 않게 */
+}
+
+/* =====================================================
+   헤더 영역
+   ===================================================== */
+
+.cafe-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* 커피 이모지 로고 - 크게 */
+.cafe-logo {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 10px;
+  /* 이모지가 흐릿하지 않도록 렌더링 힌트 */
+  font-variant-emoji: text;
+}
+
+/* 카페 이름 */
+.cafe-name {
+  font-size: 2rem;           /* 32px */
+  font-weight: 700;
+  color: var(--color-brown);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+/* 부제 */
+.cafe-tagline {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* =====================================================
+   주문서 카드 컨테이너
+   최대 너비 520px, 가운데 정렬
+   ===================================================== */
+
+.order-container {
+  max-width: 520px;
+  margin: 0 auto;
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  /* 위쪽 패딩은 탭 네비게이션이 차지하므로 제거,
+     좌우·아래 패딩은 탭 패널(.tab-panel)이 담당 */
+  padding: 0;
+  overflow: hidden; /* 탭 nav가 카드 둥근 모서리 밖으로 나가지 않게 */
+}
+
+/* 작은 화면에서 별도 내부 여백 없이 tab-panel이 처리 */
+@media (max-width: 480px) {
+  .order-container {
+    padding: 0;
+  }
+}
+
+/* =====================================================
+   폼 공통 - 그룹 간격
+   ===================================================== */
+
+/* 각 질문 블록 */
+.form-group {
+  margin-bottom: 22px;
+}
+
+/* 마지막 그룹은 아래 여백 제거 */
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   레이블
+   ===================================================== */
+
+/* 일반 label */
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 7px;
+}
+
+/* 라디오 · 체크박스용 인라인 label은 별도 클래스로 처리 */
+
+/* 필수 표시 * */
+.required {
+  color: var(--color-required);
+  margin-left: 2px;
+}
+
+/* =====================================================
+   텍스트 입력, 전화번호, 숫자 입력
+   ===================================================== */
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: #fff;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  /* 입력칸 크기가 컨테이너를 넘지 않도록 */
+  appearance: auto;
+}
+
+/* 포커스 상태 - 갈색 테두리 + 연한 갈색 그림자 */
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-brown);
+  box-shadow: var(--shadow-focus);
+}
+
+/* 플레이스홀더 */
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+/* 수량 입력 - 너비를 좁게 */
+input[type="number"] {
+  width: 90px;
+}
+
+/* textarea - 세로 리사이즈만 허용 */
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* =====================================================
+   드롭다운 (select)
+   ===================================================== */
+
+select {
+  cursor: pointer;
+}
+
+/* 기본 첫 옵션(안내 텍스트) - 연한 색 */
+select option:first-child {
+  color: var(--color-text-muted);
+}
+
+/* =====================================================
+   fieldset & legend (라디오, 체크박스 그룹)
+   ===================================================== */
+
+fieldset {
+  border: none;
+  padding: 0;
+}
+
+legend {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* =====================================================
+   라디오 버튼 - 가로 배치
+   ===================================================== */
+
+/* 라디오 label들을 flex로 가로 나열 */
+fieldset:has(input[type="radio"]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  /* legend는 flex 밖이므로 전체 너비 차지 */
+  align-items: center;
+}
+
+/* legend가 flex item이 되지 않도록 전체 너비 */
+fieldset:has(input[type="radio"]) legend {
+  flex: 0 0 100%;
+}
+
+/* 라디오 label 개별 스타일 */
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.92rem;
+  font-weight: 400;           /* 일반 label과 굵기 구분 */
+  cursor: pointer;
+  padding: 6px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;       /* 알약 모양 */
+  transition: border-color var(--transition), background-color var(--transition);
+  margin-bottom: 0;          /* label 기본 margin-bottom 제거 */
+}
+
+/* 라디오 선택된 label 강조 */
+.radio-label:has(input[type="radio"]:checked) {
+  border-color: var(--color-brown);
+  background-color: var(--color-brown-pale);
+  color: var(--color-brown);
+  font-weight: 600;
+}
+
+/* 라디오 실제 요소 - 기본 스타일 그대로 사용 */
+.radio-label input[type="radio"] {
+  width: auto;               /* 전체 너비 override 취소 */
+  accent-color: var(--color-brown);
+  cursor: pointer;
+}
+
+/* =====================================================
+   체크박스 - 가로 배치
+   ===================================================== */
+
+/* 체크박스 label들도 flex 가로 나열 */
+fieldset:has(input[type="checkbox"]) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+}
+
+fieldset:has(input[type="checkbox"]) legend {
+  flex: 0 0 100%;
+}
+
+/* 체크박스 label 개별 스타일 */
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.92rem;
+  font-weight: 400;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+/* 체크된 체크박스 label 강조 */
+.checkbox-label:has(input[type="checkbox"]:checked) {
+  color: var(--color-brown);
+  font-weight: 600;
+}
+
+/* 체크박스 실제 요소 */
+.checkbox-label input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--color-brown);
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+/* =====================================================
+   가격 힌트 텍스트 (+0원, +500원 등)
+   ===================================================== */
+
+.price-hint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* =====================================================
+   예상 금액 표시 영역
+   ===================================================== */
+
+.price-preview {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  padding: 18px 16px;
+  background-color: var(--color-brown-pale);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+
+/* 금액 숫자 강조 */
+.price-preview strong {
+  font-size: 1.5rem;          /* 24px */
+  font-weight: 700;
+  color: var(--color-brown);
+  display: inline;
+}
+
+/* 단위 '원' 포함한 전체를 크게 */
+#price-preview {
+  font-size: 1.1rem;
+}
+
+/* =====================================================
+   버튼
+   ===================================================== */
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 13px 20px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background-color var(--transition),
+              color var(--transition),
+              border-color var(--transition),
+              transform var(--transition);
+  letter-spacing: 0.3px;
+  margin-bottom: 12px;
+}
+
+/* 버튼 클릭 시 살짝 눌리는 효과 */
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* 주문하기 버튼 - 갈색 배경, 흰 글씨 */
+.btn-primary {
+  background-color: var(--color-brown);
+  color: #ffffff;
+  border-color: var(--color-brown);
+}
+
+/* hover 시 약간 밝은 갈색 + 위로 살짝 떠오르는 효과 */
+.btn-primary:hover {
+  background-color: var(--color-brown-light);
+  border-color: var(--color-brown-light);
+  transform: translateY(-3px);                          /* 3px 위로 이동 */
+  box-shadow: 0 8px 20px rgba(107, 66, 38, 0.30);      /* 그림자 강화 → 떠있는 느낌 */
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* 다시 작성 버튼 - 흰 배경 + 갈색 테두리 */
+.btn-secondary {
+  background-color: #ffffff;
+  color: var(--color-brown);
+  border-color: var(--color-brown);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-brown-pale);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* 버튼 마지막에 아래 여백 없애기 */
+.btn:last-of-type {
+  margin-bottom: 0;
+}
+
+/* =====================================================
+   유효성 오류 메시지
+   ===================================================== */
+
+.error-msg {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--color-error);
+  margin-top: 5px;
+  min-height: 1em;          /* 메시지 없을 때도 레이아웃 흔들리지 않게 */
+}
+
+/* =====================================================
+   주문 확인 메시지 영역
+   ===================================================== */
+
+.order-confirm {
+  margin-top: 24px;
+  padding: 20px 22px;
+  background-color: var(--color-success-bg);
+  color: var(--color-success-fg);
+  border: 1.5px solid var(--color-success-bd);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* =====================================================
+   hidden 클래스 - 요소 숨기기
+   JavaScript가 이 클래스를 toggle해서 표시/숨김 제어
+   ===================================================== */
+
+.hidden {
+  display: none !important;
+}
+
+/* =====================================================
+   폼과 주문 확인 사이 구분선
+   ===================================================== */
+
+#order-form + .order-confirm {
+  border-top: none;         /* 이미 카드 안에 있으므로 위 테두리 제거 */
+}
+
+/* =====================================================
+   탭 네비게이션
+   ===================================================== */
+
+/* 탭 버튼들이 나란히 놓이는 행 */
+.tab-nav {
+  display: flex;
+  border-bottom: 2px solid var(--color-brown-pale);
+  background-color: var(--color-bg);  /* 카드 배경과 약간 구분 */
+}
+
+/* 탭 버튼 공통 */
+.tab-btn {
+  flex: 1;                            /* 두 버튼이 공간을 균등 분할 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 12px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent; /* 활성 탭에서 갈색 밑줄이 될 자리 */
+  margin-bottom: -2px;                  /* border-bottom이 nav의 선 위로 올라오게 */
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-muted);       /* 비활성: 연한 갈색 */
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--color-brown);
+}
+
+/* 활성(선택된) 탭 */
+.tab-btn.active {
+  color: var(--color-brown);            /* 갈색 글씨 */
+  border-bottom-color: var(--color-brown); /* 갈색 밑줄 */
+  font-weight: 700;
+}
+
+/* =====================================================
+   주문 건수 배지 (탭 버튼 안)
+   ===================================================== */
+
+.order-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: var(--color-brown);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 10px;                  /* 완전히 둥근 알약 모양 */
+  line-height: 1;
+}
+
+/* =====================================================
+   탭 패널
+   각 탭의 콘텐츠 영역 - order-container의 패딩을 여기서 담당
+   ===================================================== */
+
+.tab-panel {
+  padding: 28px 28px 32px;
+}
+
+/* =====================================================
+   주문 내역 패널 전용 스타일
+   ===================================================== */
+
+/* 주문이 없을 때 안내 문구 */
+.orders-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  padding: 32px 0;
+}
+
+/* =====================================================
+   주문 카드 (1건 = 1카드)
+   ===================================================== */
+
+/* 카드 전체 */
+.order-card {
+  position: relative;                   /* 취소 버튼을 오른쪽 위에 절대 배치하기 위해 */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: var(--color-bg);    /* 베이지 배경 */
+  border-radius: var(--radius-md);
+  padding: 14px 16px 14px 20px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--color-brown); /* 왼쪽 갈색 세로줄 */
+}
+
+/* 카드 마지막 하나는 아래 여백 없앰 */
+.order-card:last-child {
+  margin-bottom: 0;
+}
+
+/* 카드 1행: #번호 이름님 · 금액 */
+.order-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-brown);
+  padding-right: 52px;                  /* 취소 버튼 공간 확보 */
+}
+
+/* 카드 2행: 음료 설명 */
+.order-card-drink {
+  font-size: 0.88rem;
+  color: var(--color-text);
+}
+
+/* 카드 3행: 요청사항 · 시간 (연한 색) */
+.order-card-meta {
+  font-size: 0.80rem;
+  color: var(--color-text-muted);
+}
+
+/* =====================================================
+   취소 버튼 (카드 오른쪽 위)
+   ===================================================== */
+
+.btn-cancel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 10px;
+  background-color: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: border-color var(--transition),
+              color var(--transition),
+              background-color var(--transition);
+}
+
+.btn-cancel:hover {
+  border-color: var(--color-required);  /* 빨간색 테두리 */
+  color: var(--color-required);
+  background-color: #fdf0ef;
+}
+
+/* =====================================================
+   주문 내역 합계 + 내역 모두 지우기 영역
+   ===================================================== */
+
+.orders-summary {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1.5px solid var(--color-brown-pale);
+}
+
+/* 총 주문 금액 텍스트 */
+.orders-total-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-brown);
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+/* 내역 모두 지우기 버튼 - 빨간 계열 */
+.btn-danger {
+  background-color: #ffffff;
+  color: var(--color-required);
+  border-color: var(--color-required);
+}
+
+.btn-danger:hover {
+  background-color: #fdf0ef;
+}
+
+/* =====================================================
+   반응형 - 모바일 (480px 이하)
+   ===================================================== */
+
+@media (max-width: 480px) {
+
+  /* 카페 로고 약간 축소 */
+  .cafe-logo {
+    font-size: 52px;
+  }
+
+  /* 카페 이름 축소 */
+  .cafe-name {
+    font-size: 1.6rem;
+  }
+
+  /* 라디오/체크박스 그룹: 좁은 화면에서도 가로 유지, 넘치면 줄바꿈 */
+  fieldset:has(input[type="radio"]),
+  fieldset:has(input[type="checkbox"]) {
+    gap: 8px 12px;
+  }
+
+  /* 알약 라디오 버튼 패딩 축소 */
+  .radio-label {
+    padding: 5px 11px;
+    font-size: 0.88rem;
+  }
+
+  .checkbox-label {
+    font-size: 0.88rem;
+  }
+
+  /* 예상 금액 숫자 약간 축소 */
+  .price-preview strong {
+    font-size: 1.25rem;
+  }
+
+  /* 탭 버튼 폰트 및 패딩 축소 */
+  .tab-btn {
+    font-size: 0.85rem;
+    padding: 12px 8px;
+  }
+
+  /* 탭 패널 내부 여백 축소 */
+  .tab-panel {
+    padding: 20px 16px 24px;
+  }
+}
+
